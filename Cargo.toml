@@ -1,0 +1,6 @@
+[package]
+name = "weekend_raytracer"
+version = "0.1.0"
+authors = ["Keith Fieldhouse <keith.fieldhouse@kitware.com>"]
+
+[dependencies]
