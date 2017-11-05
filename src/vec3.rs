@@ -9,51 +9,52 @@ use std::ops::Sub;
 use std::ops::Mul;
 use std::ops::Div;
 
+#[derive(Clone, Copy)]
 pub struct Vec3 {
     e: [f32; 3]
     }
 
 //
 // Methods
-// 
+//
 impl Vec3 {
-    fn origin() -> Vec3 {
+    pub fn origin() -> Vec3 {
         Vec3{ e: [ 0.0, 0.0, 0.0]}
     }
     pub fn new(x: f32, y: f32, z:f32) -> Vec3 {
-        Vec3{ e: [x, y, z]}                 
+        Vec3{ e: [x, y, z]}
     }
 
     // This implementation iis following the book's design.
-    // Later I'll try to do a more idiomatic pass using traits 
-    fn r(self) -> f32 {
+    // Later I'll try to do a more idiomatic pass using traits
+    pub fn r(self) -> f32 {
         self.e[0]
     }
-    fn g(self) -> f32 {
+    pub fn g(self) -> f32 {
         self.e[1]
     }
-    fn b(self) -> f32 {
+    pub fn b(self) -> f32 {
         self.e[2]
     }
-    fn x(self) -> f32 {
+    pub fn x(self) -> f32 {
         self.e[0]
     }
-    fn y(self) -> f32 {
+    pub fn y(self) -> f32 {
         self.e[1]
     }
-    fn z(self) -> f32 {
+    pub fn z(self) -> f32 {
         self.e[2]
     }
 
-    fn length(self) -> f32 {
+    pub fn length(self) -> f32 {
         (self.e[0] * self.e[0] + self.e[1] * self.e[1]  + self.e[2] * self.e[2])
     }
 
-    fn squared_length(self) -> f32 {
+    pub fn squared_length(self) -> f32 {
         (self.e[0] * self.e[0] + self.e[1] * self.e[1]  + self.e[2] * self.e[2])
     }
 
-    fn make_unit_vector(mut self) {
+    pub fn make_unit_vector(mut self) {
         let k: f32 = 1.0 / (self.e[0] * self.e[0] + self.e[1] * self.e[1]  + self.e[2] * self.e[2]).sqrt();
         self.e[0] *= k;
         self.e[1] *= k;
@@ -64,7 +65,7 @@ impl Vec3 {
 
 //
 // Operators
-// 
+//
 
 impl Neg for Vec3 {
     type Output = Vec3;
@@ -123,8 +124,8 @@ impl Add for Vec3 {
     type Output = Vec3;
 
     fn add(self,other: Vec3) -> Vec3 {
-        Vec3{e: [self.e[0] + other.e[0], 
-                 self.e[1] + other.e[1], 
+        Vec3{e: [self.e[0] + other.e[0],
+                 self.e[1] + other.e[1],
                  self.e[2] + other.e[2]]}
     }
 }
@@ -133,8 +134,8 @@ impl Sub for Vec3 {
     type Output = Vec3;
 
     fn sub(self,other: Vec3) -> Vec3 {
-        Vec3{e: [self.e[0] - other.e[0], 
-                 self.e[1] - other.e[1], 
+        Vec3{e: [self.e[0] - other.e[0],
+                 self.e[1] - other.e[1],
                  self.e[2] - other.e[2]]}
     }
 }
@@ -143,8 +144,8 @@ impl Mul<Vec3> for Vec3 {
     type Output = Vec3;
 
     fn mul(self,other: Vec3) -> Vec3 {
-        Vec3{e: [self.e[0] * other.e[0], 
-                 self.e[1] * other.e[1], 
+        Vec3{e: [self.e[0] * other.e[0],
+                 self.e[1] * other.e[1],
                  self.e[2] * other.e[2]]}
     }
 }
@@ -153,18 +154,29 @@ impl Mul<f32> for Vec3 {
     type Output = Vec3;
 
     fn mul(self,other: f32) -> Vec3 {
-        Vec3{e: [self.e[0] * other, 
-                 self.e[1] * other, 
+        Vec3{e: [self.e[0] * other,
+                 self.e[1] * other,
                  self.e[2] * other]}
     }
 }
+
+impl Mul<Vec3> for f32 {
+    type Output = Vec3;
+
+    fn mul(self,other: Vec3) -> Vec3 {
+        Vec3{e: [other.e[0] * self,
+                 other.e[1] * self,
+                 other.e[2] * self]}
+    }
+}
+
 
 impl Div<Vec3> for Vec3 {
     type Output = Vec3;
 
     fn div(self,other: Vec3) -> Vec3 {
-        Vec3{e: [self.e[0] / other.e[0], 
-                 self.e[1] / other.e[1], 
+        Vec3{e: [self.e[0] / other.e[0],
+                 self.e[1] / other.e[1],
                  self.e[2] / other.e[2]]}
     }
 }
@@ -173,18 +185,17 @@ impl Div<f32> for Vec3 {
     type Output = Vec3;
 
     fn div(self,other: f32) -> Vec3 {
-        Vec3{e: [self.e[0] / other, 
-                 self.e[1] / other, 
+        Vec3{e: [self.e[0] / other,
+                 self.e[1] / other,
                  self.e[2] / other]}
     }
 }
 
-
 //
 // Functions
-// 
+//
 fn dot(v1: Vec3, v2: Vec3) -> f32 {
-    v1.e[0] * v2.e[0] + v1.e[1] * v2.e[1] + v1.e[2] + v2.e[2]    
+    v1.e[0] * v2.e[0] + v1.e[1] * v2.e[1] + v1.e[2] + v2.e[2]
 }
 
 fn cross(v1: Vec3, v2: Vec3) -> Vec3 {
@@ -195,3 +206,8 @@ fn cross(v1: Vec3, v2: Vec3) -> Vec3 {
             ]
         }
 }
+
+pub fn unit_vector(v: Vec3) -> Vec3 {
+   v / v.length()
+}
+
