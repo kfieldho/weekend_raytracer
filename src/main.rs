@@ -1,7 +1,20 @@
 pub mod vec3;
 pub mod ray;
 
+
+fn hit_sphere(center :vec3::Vec3, radius: f32, r :ray::Ray) -> bool {
+    let oc : vec3::Vec3 = r.origin() - center;
+    let a : f32 = vec3::dot(r.direction(), r.direction());
+    let b : f32 = 2.0 * vec3::dot(oc,r.direction());
+    let c : f32 = vec3::dot(oc,oc) - radius * radius;
+    let discriminent = b * b - 4.0 * a * c;
+    discriminent > 0.0
+}
+
 fn color(r :ray::Ray) -> vec3::Vec3 {
+    if hit_sphere(vec3::Vec3 ::new(0.0,0.0,-1.0), 0.5, r) {
+        return vec3::Vec3::new(1.0,0.0,0.0);
+    }
     let unit_direction : vec3::Vec3 = vec3::unit_vector(r.direction());
     let t: f32 = 0.5 * (unit_direction.y() + 1.0);
     (1.0 - t)*vec3::Vec3::new(1.0,1.0,1.0) + t*vec3::Vec3::new(0.5,0.7,1.0)
@@ -35,4 +48,3 @@ fn main() {
         }
     }
 }
-

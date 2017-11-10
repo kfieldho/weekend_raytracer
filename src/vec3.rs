@@ -9,7 +9,7 @@ use std::ops::Sub;
 use std::ops::Mul;
 use std::ops::Div;
 
-#[derive(Clone, Copy)]
+#[derive(Clone,Copy,Debug)]
 pub struct Vec3 {
     e: [f32; 3]
     }
@@ -194,11 +194,11 @@ impl Div<f32> for Vec3 {
 //
 // Functions
 //
-fn dot(v1: Vec3, v2: Vec3) -> f32 {
-    v1.e[0] * v2.e[0] + v1.e[1] * v2.e[1] + v1.e[2] + v2.e[2]
+pub fn dot(v1: Vec3, v2: Vec3) -> f32 {
+    v1.e[0] * v2.e[0] + v1.e[1] * v2.e[1] + v1.e[2] * v2.e[2]
 }
 
-fn cross(v1: Vec3, v2: Vec3) -> Vec3 {
+pub fn cross(v1: Vec3, v2: Vec3) -> Vec3 {
     Vec3{e: [
             v1.e[1] * v2.e[2] - v2.e[2] * v2.e[1],
             -(v1.e[0] * v2.e[2] - v2.e[2] * v2.e[0]),
